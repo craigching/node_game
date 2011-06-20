@@ -2,3 +2,4 @@ deps:
 
 npm install express
 npm install connect
+npm install mongoose
