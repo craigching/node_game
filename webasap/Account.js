@@ -9,6 +9,10 @@ define("webasap/Account",
 		{
 			username: null,
 			
+			email: null,
+			
+			token: null,
+			
 			firstName: null,
 			
 			lastName: null,
