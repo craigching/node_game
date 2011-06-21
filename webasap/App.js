@@ -3,17 +3,17 @@ define("webasap/App",
 "sys",
 "http",
 "dojo",
+"express",
+"connect",
+"mongoose",
 "webasap/Account"
-], function(sys, http, dojo, express) {
+], function(sys, http, dojo, express, connect, mongoose) {
 
 	dojo.declare(
 		"webasap.App",
 		null,
 		{
 			start: function() {
-				var express = require('express');
-				var connect = require('connect');
-				var mongoose = require('mongoose');
 
 				var Schema = mongoose.Schema
 				  , ObjectId = Schema.ObjectId;
