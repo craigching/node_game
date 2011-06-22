@@ -1,12 +1,15 @@
 define("webasap/Character", 
 [
-"dojo"
+"dojo",
+"webasap/_Persistent"
 ], function(dojo) {
 
 	dojo.declare(
 		"webasap.Character",
-		null,
+		[webasap._Persistent],
 		{
+			username: null,
+			
 			name: null,
 			
 			melee: null,
@@ -15,11 +18,16 @@ define("webasap/Character",
 			
 			magic: null,
 			
+			schema: {
+			    username      : String
+			  , name          : String
+			  , melee         : String
+			  , ranged        : String
+			  , magic         : String
+			},
+			
 			constructor: function(args) {
-				this.name = args.name;
-				this.melee = args.melee;
-				this.ranged = args.ranged;
-				this.magic = args.magic;
+				dojo.mixin(this, args);
 			}
 		});
 
