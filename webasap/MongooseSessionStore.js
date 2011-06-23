@@ -1,13 +1,13 @@
 define("webasap/MongooseSessionStore", 
 [
 "dojo",
-"connect",
+"express",
 "mongoose"
-], function(dojo, connect, mongoose) {
+], function(dojo, express, mongoose) {
 
 	dojo.declare(
 		"webasap.MongooseSessionStore",
-		[connect.session.Store],
+		[express.session.Store],
 		{
 			schema: {
 			      sid: { type: String, required: true, unique: true }
