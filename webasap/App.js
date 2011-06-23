@@ -6,7 +6,8 @@ define("webasap/App",
 "express",
 "connect",
 "mongoose",
-"webasap/Account"
+"webasap/Account",
+"webasap/MongooseSessionStore"
 ], function(sys, http, dojo, express, connect, mongoose) {
 
 	dojo.declare(
@@ -16,9 +17,16 @@ define("webasap/App",
 			start: function() {
 
 				mongoose.connect('mongodb://localhost/dungeon_db');
-				var server = express.createServer(connect.bodyParser());
+				var sessionStore = new webasap.MongooseSessionStore();
+				var server = express.createServer();
 
 				server.use(express.logger());
+				server.use(express.bodyParser());
+				server.use(express.cookieParser());
+				server.use(express.session({
+					store: sessionStore,
+					secret: 'blahblahblah'
+				}));
 
 				server.get('/', function(req, res){
 					res.send('Hello, World, from Express.');
