@@ -8,14 +8,19 @@ define("webasap/App",
 "mongoose",
 "webasap/Account",
 "webasap/MongooseSessionStore",
-"webasap/Chat"
+"webasap/Chat",
+"webasap/ServiceRegistry"
 ], function(sys, http, dojo, express, connect, mongoose) {
-
+	
 	dojo.declare(
 		"webasap.App",
 		null,
 		{
 			start: function() {
+				
+				// Create the Service Registry before anything else,
+				// and create it in the global scope
+				registry = new webasap.ServiceRegistry();
 
 				mongoose.connect('mongodb://localhost/dungeon_db');
 				var sessionStore = new webasap.MongooseSessionStore();
