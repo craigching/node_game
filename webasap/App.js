@@ -7,7 +7,8 @@ define("webasap/App",
 "connect",
 "mongoose",
 "webasap/Account",
-"webasap/MongooseSessionStore"
+"webasap/MongooseSessionStore",
+"webasap/Chat"
 ], function(sys, http, dojo, express, connect, mongoose) {
 
 	dojo.declare(
@@ -27,6 +28,8 @@ define("webasap/App",
 					store: sessionStore,
 					secret: 'blahblahblah'
 				}));
+				
+				var chat = new webasap.Chat({server: server});
 
 				server.get('/', function(req, res){
 					res.send('Hello, World, from Express.');
