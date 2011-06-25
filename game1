@@ -1,0 +1,9 @@
+#!/bin/sh
+
+curl --header "Content-Type:application/json" -d '{}' http://localhost:8000/games/t3
+curl --header "Content-Type:application/json" -X PUT -d '{"index": 0, "ch": "X"}' http://localhost:8000/games/t3
+curl --header "Content-Type:application/json" -X PUT -d '{"index": 1, "ch": "O"}' http://localhost:8000/games/t3
+curl --header "Content-Type:application/json" -X PUT -d '{"index": 4, "ch": "X"}' http://localhost:8000/games/t3
+curl --header "Content-Type:application/json" -X PUT -d '{"index": 2, "ch": "O"}' http://localhost:8000/games/t3
+curl --header "Content-Type:application/json" -X PUT -d '{"index": 8, "ch": "X"}' http://localhost:8000/games/t3
+#curl --header "Content-Type:application/json" -X PUT -d '{"index": 0, "ch": "X"}' http://localhost:8000/games/t3

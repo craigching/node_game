@@ -10,7 +10,8 @@ define("webasap/App",
 "webasap/AccountService",
 "webasap/Account",
 "webasap/MongooseSessionStore",
-"webasap/ChatService"
+"webasap/ChatService",
+"webasap/T3GameService"
 ], function(sys, http, dojo, express, connect, mongoose) {
     
     dojo.declare(
@@ -39,6 +40,7 @@ define("webasap/App",
 
                 registry.register("webasap.ChatService", new webasap.ChatService());
                 registry.register("webasap.AccountService", new webasap.AccountService());
+                registry.register("webasap.T3GameService", new webasap.T3GameService());
 
                 server.get('/', function(req, res){
                     res.send('Hello, World, from Express.');
