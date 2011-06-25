@@ -1,10 +1,10 @@
-define("webasap/Chat", 
+define("webasap/ChatService", 
 [
 "dojo"
 ], function(dojo) {
 
 	dojo.declare(
-		"webasap.Chat",
+		"webasap.ChatService",
 		null,
 		{
 			constructor: function(args) {
@@ -32,5 +32,5 @@ define("webasap/Chat",
 			}
 		});
 
-return webasap.Chat;
+return webasap.ChatService;
 });

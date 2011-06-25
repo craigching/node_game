@@ -8,7 +8,7 @@ define("webasap/App",
 "mongoose",
 "webasap/Account",
 "webasap/MongooseSessionStore",
-"webasap/Chat",
+"webasap/ChatService",
 "webasap/ServiceRegistry"
 ], function(sys, http, dojo, express, connect, mongoose) {
 	
@@ -25,6 +25,8 @@ define("webasap/App",
 				mongoose.connect('mongodb://localhost/dungeon_db');
 				var sessionStore = new webasap.MongooseSessionStore();
 				var server = express.createServer();
+				
+				registry.register("http", server);
 
 				server.use(express.logger());
 				server.use(express.bodyParser());
@@ -34,7 +36,7 @@ define("webasap/App",
 					secret: 'blahblahblah'
 				}));
 				
-				var chat = new webasap.Chat({server: server});
+				var chat = new webasap.ChatService({server: server});
 
 				server.get('/', function(req, res){
 					res.send('Hello, World, from Express.');
