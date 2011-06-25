@@ -41,7 +41,7 @@ define("webasap/App",
                 server.get('/', function(req, res){
                     res.send('Hello, World, from Express.');
                 });
-                
+
                 server.post('/accounts', function(req, res){
                     new webasap.Account(req.body).save();
                     res.send('Create account');
