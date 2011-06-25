@@ -6,10 +6,11 @@ define("webasap/App",
 "express",
 "connect",
 "mongoose",
+"webasap/ServiceRegistry",
+"webasap/AccountService",
 "webasap/Account",
 "webasap/MongooseSessionStore",
-"webasap/ChatService",
-"webasap/ServiceRegistry"
+"webasap/ChatService"
 ], function(sys, http, dojo, express, connect, mongoose) {
     
     dojo.declare(
@@ -37,25 +38,10 @@ define("webasap/App",
                 registry.register("http", server);
 
                 registry.register("webasap.ChatService", new webasap.ChatService());
+                registry.register("webasap.AccountService", new webasap.AccountService());
 
                 server.get('/', function(req, res){
                     res.send('Hello, World, from Express.');
-                });
-
-                server.post('/accounts', function(req, res){
-                    new webasap.Account(req.body).save();
-                    res.send('Create account');
-                });
-
-                server.get('/accounts', function(req, res){
-                    res.contentType("application/json");
-                    console.log("Finding accounts:");
-                    new webasap.Account().findAll(function(err, accounts){
-                        sys.puts("accounts to send: " + sys.inspect(accounts));
-                        sys.puts("Sending accounts.");
-                        res.send(JSON.stringify(accounts));
-                        console.log("Done.");
-                    });
                 });
 
                 server.listen(8000);
