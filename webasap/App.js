@@ -46,7 +46,7 @@ define("webasap/App",
                     new webasap.Account(req.body).save();
                     res.send('Create account');
                 });
-                
+
                 server.get('/accounts', function(req, res){
                     res.contentType("application/json");
                     console.log("Finding accounts:");
