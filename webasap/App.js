@@ -25,7 +25,7 @@ define("webasap/App",
                 mongoose.connect('mongodb://localhost/dungeon_db');
                 var sessionStore = new webasap.MongooseSessionStore();
                 var server = express.createServer();
-                
+
                 server.use(express.logger());
                 server.use(express.bodyParser());
                 server.use(express.cookieParser());
@@ -36,7 +36,7 @@ define("webasap/App",
 
                 registry.register("http", server);
 
-                var chat = new webasap.ChatService();
+                registry.register("webasap.ChatService", new webasap.ChatService());
 
                 server.get('/', function(req, res){
                     res.send('Hello, World, from Express.');
