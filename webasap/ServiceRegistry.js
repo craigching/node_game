@@ -36,7 +36,7 @@ define("webasap/ServiceRegistry",
 		        }
 			},
 			
-			startTrackService: function(name) {
+			startTrackService: function(name, bind, unbind) {
 		        var entry = this._getOrCreateServiceEntry(name);
 
 		        // Add the handlers

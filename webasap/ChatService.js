@@ -7,12 +7,22 @@ define("webasap/ChatService",
 		"webasap.ChatService",
 		null,
 		{
-			constructor: function(args) {
-				var server = args.server;
+			constructor: function() {
+				registry.startTrackService(
+					"http"
+					, dojo.hitch(this, "_bindHttpService")
+					, dojo.hitch(this, "_unbindHttpService")
+				);
+			},
+			
+			_bindHttpService: function(server) {
 				server.get('/chat/join', dojo.hitch(this, "join"));
 				server.get('/chat/recv', dojo.hitch(this, "recv"));
 				server.get('/chat/send', dojo.hitch(this, "send"));
 				server.get('/chat/quit', dojo.hitch(this, "quit"));
+			},
+			
+			_unbindHttpService: function(server) {
 			},
 			
 			join: function(req, res) {
