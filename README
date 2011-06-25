@@ -3,3 +3,6 @@ deps:
 npm install express
 npm install connect
 npm install mongoose
+
+NOTE: Need to see if we can forget the 'npm install connect' call
+since express includes connect
