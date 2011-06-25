@@ -10,8 +10,20 @@ define("webasap/T3GameService",
         {
             board: [],
 
+            constructor: function() {
+                this.board = [];
+            },
+
             place: function(index, ch) {
                 this.board[index] = ch;
+            },
+
+            get: function(index) {
+                return this.board[index];
+            },
+
+            clear: function() {
+                this.board = [];
             },
 
             win: function() {
@@ -22,7 +34,9 @@ define("webasap/T3GameService",
                 // 3, 4, 5
                 // 6, 7, 8
                 for (i = 0; i < 3; i += 3) {
-                    if (this.board[i] === this.board[i + 1] && this.board[i + 1] === this.board[i + 2]) {
+                    if (this.board[i] &&
+                        this.board[i] === this.board[i + 1] &&
+                        this.board[i + 1] === this.board[i + 2]) {
                         return true;
                     }
                 }
@@ -30,14 +44,20 @@ define("webasap/T3GameService",
                 // 1, 4, 7
                 // 2, 5, 8
                 for (i = 0; i < 3; ++i) {
-                    if (this.board[i] === this.board[i + 3] && this.board[i + 3] === this.board[i + 6]) {
+                    if (this.board[i] &&
+                        this.board[i] === this.board[i + 3] &&
+                        this.board[i + 3] === this.board[i + 6]) {
                         return true
                     }
                 }
-                if (this.board[0] === this.board[4] && this.board[4] === this.board[8]) {
+                if (this.board[0] &&
+                    this.board[0] === this.board[4] &&
+                    this.board[4] === this.board[8]) {
                     return true;
                 }
-                if (this.board[2] === this.board[4] && this.board[4] === this.board[6]) {
+                if (this.board[2] &&
+                    this.board[2] === this.board[4]
+                    && this.board[4] === this.board[6]) {
                     return true;
                 }
                 return false;
@@ -82,7 +102,7 @@ define("webasap/T3GameService",
             },
 
             _createGame: function(req, res) {
-                this.board = new webasap._T3Board();
+                this.board.clear();
                 res.end("New game created.\n");
             },
 
@@ -100,7 +120,22 @@ define("webasap/T3GameService",
             },
 
             _getGame: function(req, res) {
-                
+                var state = "";
+                var i, x, y, z;
+                for (i = 0; i < 9; i += 3) {
+                    x = this.board.get(i);
+                    y = this.board.get(i + 1);
+                    z = this.board.get(i + 2);
+                    state +=
+                        (x ? x : " ") + "|" +
+                        (y ? y : " ") + "|" +
+                        (z ? z : " ") + "\n";
+                    if (i < 6) {
+                        state += "-----\n";
+                    }
+                }
+                state += "\n";
+                res.end(state);
             }
         });
 
