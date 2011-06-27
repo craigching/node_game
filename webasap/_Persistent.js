@@ -24,13 +24,17 @@ define("webasap/_Persistent",
                         inst[i] = this[i];
                     }
                     inst.save(function(err){
-                        console.log("error: " + err);
+                        console.log("Error saving account instance: " + err);
                     });
                 }
             },
             
             findAll: function(callback) {
                 this.Model.find({}, callback);
+            },
+
+            findOne: function(params, callback) {
+                this.Model.findOne(params, callback);
             }
         });
 

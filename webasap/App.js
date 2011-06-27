@@ -9,10 +9,9 @@ define("webasap/App",
 "webasap/ServiceRegistry",
 "webasap/AccountService",
 "webasap/Account",
-"webasap/MongooseSessionStore",
 "webasap/ChatService",
 "webasap/T3GameService"
-], function(sys, http, dojo, express, connect, mongoose) {
+], function(sys, http, dojo, express, connect, mongoose, redis) {
     
     dojo.declare(
         "webasap.App",
@@ -25,14 +24,15 @@ define("webasap/App",
                 registry = new webasap.ServiceRegistry();
 
                 mongoose.connect('mongodb://localhost/dungeon_db');
-                var sessionStore = new webasap.MongooseSessionStore();
+               // var sessionStore = new webasap.MongooseSessionStore();
                 var server = express.createServer();
+                var RedisStore = require('connect-redis')(express);
 
                 server.use(express.logger());
                 server.use(express.bodyParser());
                 server.use(express.cookieParser());
                 server.use(express.session({
-                    store: sessionStore,
+                    store: new RedisStore,
                     secret: 'blahblahblah'
                 }));
 
