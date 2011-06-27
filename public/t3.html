@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <title>Tic Tac Toe</title>
+
+    <style type="text/css">
+        @import "dojo-1.7.0b2/dijit/themes/claro/document.css";
+        @import "dojo-1.7.0b2/dijit/css/dijitTests.css";
+    </style>
+
+    <!-- required: a default dijit theme: -->
+    <link id="themeStyles" rel="stylesheet" href="/dojo-1.7.0b2/dijit/themes/claro/claro.css"/>
+
+    <!-- required: dojo.js -->
+    <script type="text/javascript" src="dojo-1.7.0b2/dojo/dojo.js"
+        data-dojo-config="parseOnLoad: false, isDebug: true"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script type="text/javascript">
+        dojo.require("dijit.dijit"); // optimize: load dijit layer
+        dojo.require("dojo.parser");    // scan page for widgets and instantiate them
+
+        // widgets used inside subpage loaded via href=
+        dojo.require("webasap.ui.T3View");
+
+        function randomMessageId(){
+            return Math.floor(Math.random() * 3) + 3;
+        }
+
+        dojo.addOnLoad(function(){
+            dojo.parser.parse();
+            console.log("Creating new io.Socket");
+            var socket = io.connect("http://localhost:8000");
+            console.log("Done creating io.Socket");
+//            var content = $('#content');
+
+            socket.on('connect', function() {
+                console.log("connect");
+            });
+
+            socket.on('message', function(message){
+                console.log("message: " + message);
+//                content.prepend(message + '<br />');
+            }) ;
+
+            socket.on('disconnect', function() {
+                console.log('disconnected');
+//                content.html("<b>Disconnected!</b>");
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="content" data-dojo-type="webasap.ui.T3View"></div>
+    <!--
+    <script>    
+        $(document).ready(function() {
+            console.log("Creating new io.Socket");
+            var socket = io.connect("http://localhost:3000");
+            console.log("Done creating io.Socket");
+            var content = $('#content');
+
+            socket.on('connect', function() {
+                console.log("connect");
+            });
+
+            socket.on('message', function(message){
+                console.log("message: " + message);
+                content.prepend(message + '<br />');
+            }) ;
+
+            socket.on('disconnect', function() {
+                console.log('disconnected');
+                content.html("<b>Disconnected!</b>");
+            });
+
+        });
+    </script>
+    -->
+</body>
+</html>
