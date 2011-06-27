@@ -31,13 +31,12 @@ define("webasap/App",
                 server.use(express.static('./public'));
                 server.use(express.logger());
                 server.use(express.bodyParser());
-                /*
                 server.use(express.cookieParser());
                 server.use(express.session({
                     store: new RedisStore,
                     secret: 'blahblahblah'
                 }));
-                */
+
                 const io = require('socket.io').listen(server);
 
                 registry.register("http", server);
