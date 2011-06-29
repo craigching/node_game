@@ -5,6 +5,7 @@ npm install connect
 npm install mongoose
 npm install redis
 npm install connect-redis
+npm install socket.io
 
 NOTE: Need to see if we can forget the 'npm install connect' call
 since express includes connect

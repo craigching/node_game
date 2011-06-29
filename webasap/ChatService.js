@@ -8,10 +8,16 @@ define("webasap/ChatService",
         null,
         {
             constructor: function() {
+                this.channel = {};
                 registry.startTrackService(
                     "http"
                     , dojo.hitch(this, "_bindHttpService")
                     , dojo.hitch(this, "_unbindHttpService")
+                );
+                registry.startTrackService(
+                    "socket.io"
+                    , dojo.hitch(this, "_bindIo")
+                    , dojo.hitch(this, "_unbindIo")
                 );
             },
 
@@ -23,6 +29,24 @@ define("webasap/ChatService",
             },
 
             _unbindHttpService: function(server) {
+            },
+
+            _bindIo: function(io) {
+                this.channel = io.of('/chat');
+                this.channel.on('connection', dojo.hitch(this, function (socket) {
+                    console.log(">> Chat << this.channel.on'connection'");
+                    socket.emit('chat message', {
+                        that: 'only'
+                        , '/chat': 'will get'
+                    });
+                    this.channel.emit('chat message', {
+                        everyone: 'in'
+                        , '/chat': 'will get'
+                    });
+                }));
+            },
+
+            _unbindIo: function(io) {
             },
 
             join: function(req, res) {

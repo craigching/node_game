@@ -79,16 +79,29 @@ define("webasap/T3GameService",
         "webasap.T3GameService",
         null,
         {
-            board: null,
 
             constructor: function() {
+                this.board = new webasap._T3Board();
+                this.channel = {};
+                this.redis = {};
+                this.client = {};
                 registry.startTrackService(
                     "http"
                     , dojo.hitch(this, "_bindHttpService")
                     , dojo.hitch(this, "_unbindHttpService")
                 );
 
-                this.board = new webasap._T3Board();
+                registry.startTrackService(
+                    "redis"
+                    , dojo.hitch(this, "_bindRedis")
+                    , dojo.hitch(this, "_unbindRedis")
+                );
+
+                registry.startTrackService(
+                    "socket.io"
+                    , dojo.hitch(this, "_bindIo")
+                    , dojo.hitch(this, "_unbindIo")
+                );
             },
 
             _bindHttpService: function(server) {
@@ -99,6 +112,33 @@ define("webasap/T3GameService",
             },
 
             _unbindHttpService: function(server) {
+            },
+
+            _bindRedis: function(redis) {
+                this.redis = redis;
+                this.client = redis.createClient();
+//                this.client.subscribe("tictactoe");
+            },
+
+            _unbindRedis: function(redis) {
+            },
+
+            _bindIo: function(io) {
+                this.channel = io.of('/games/t3');
+                this.channel.on('connection', dojo.hitch(this, function (socket) {
+                    console.log("this.channel.on'connection'");
+                    socket.emit('a message', {
+                        that: 'only'
+                        , '/games/t3': 'will get'
+                    });
+                    this.channel.emit('a message', {
+                        everyone: 'in'
+                        , '/games/t3': 'will get'
+                    });
+                }));
+            },
+            
+            _unbindIo: function(io) {
             },
 
             _createGame: function(req, res) {
@@ -135,6 +175,7 @@ define("webasap/T3GameService",
                     }
                 }
                 state += "\n";
+                this.client.publish("tictactoe", state);
                 res.end(state);
             }
         });
