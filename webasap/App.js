@@ -10,6 +10,7 @@ define("webasap/App",
 "webasap/AccountService",
 "webasap/Account",
 "webasap/ChatService",
+"webasap/LoginService",
 "webasap/T3GameService"
 ], function(sys, http, dojo, express, connect, mongoose, redis) {
     
@@ -35,11 +36,15 @@ define("webasap/App",
                     store: new RedisStore,
                     secret: 'blahblahblah'
                 }));
+                server.post('/test', function(req, res){
+                    res.send('test');
+                });
 
                 registry.register("http", server);
 
                 registry.register("webasap.ChatService", new webasap.ChatService());
                 registry.register("webasap.AccountService", new webasap.AccountService());
+                registry.register("webasap.LoginService", new webasap.LoginService());
                 registry.register("webasap.T3GameService", new webasap.T3GameService());
 
                 server.get('/', function(req, res){
