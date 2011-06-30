@@ -25,10 +25,11 @@ define("webasap/App",
                 registry = new webasap.ServiceRegistry();
 
                 mongoose.connect('mongodb://localhost/dungeon_db');
-               // var sessionStore = new webasap.MongooseSessionStore();
                 var server = express.createServer();
                 var RedisStore = require('connect-redis')(express);
 
+
+                server.use(express.static('./public'));
                 server.use(express.logger());
                 server.use(express.bodyParser());
                 server.use(express.cookieParser());
@@ -40,7 +41,13 @@ define("webasap/App",
                     res.send('test');
                 });
 
+                const io = require('socket.io').listen(server);
+                const redis = require('redis');
+//                const client = redis.createClient();
+
                 registry.register("http", server);
+                registry.register("redis", redis);
+                registry.register("socket.io", io);
 
                 registry.register("webasap.ChatService", new webasap.ChatService());
                 registry.register("webasap.AccountService", new webasap.AccountService());
