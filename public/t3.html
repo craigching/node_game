@@ -24,13 +24,9 @@
         // widgets used inside subpage loaded via href=
         dojo.require("webasap.ui.T3View");
 
-        function randomMessageId(){
-            return Math.floor(Math.random() * 3) + 3;
-        }
-        
         var t3 = {};
         var chat = {};
-        
+
         var index = 0;
 
         function timeout() {
@@ -42,9 +38,9 @@
         
         dojo.addOnLoad(function(){
             dojo.parser.parse();
-            var socket = io.connect('http://localhost:8000/');
-            t3 = socket.socket.of('/games/t3');
-            chat = socket.socket.of('/chat');
+
+            t3 = io.connect("http://localhost:8000/games/t3");
+            chat = io.connect("http://localhost:8000/chat");
 
               t3.on('connect', function () {
                   console.log("t3.on'connect'");
