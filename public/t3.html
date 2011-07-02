@@ -18,19 +18,25 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script type="text/javascript">
-        dojo.require("dijit.dijit"); // optimize: load dijit layer
-        dojo.require("dojo.parser");    // scan page for widgets and instantiate them
+        // Get the service registry and instantiate it
+        // before anything else
+        dojo.require("webasap.ServiceRegistry");
+        var registry = new webasap.ServiceRegistry();
 
-        // widgets used inside subpage loaded via href=
+        dojo.require("dijit.dijit");
+        dojo.require("dojo.parser");
+
+        dojo.require("webasap.T3GameClient");
         dojo.require("webasap.ui.T3View");
 
-        var t3 = {};
-        var chat = {};
+        dojo.require("webasap.ChatClient");
 
         var index = 0;
 
         function timeout() {
-            t3.emit('move', {
+            var t3 = registry.getService("webasap.T3GameClient")[0];
+            console.debug(t3);
+            t3.move({
                 ch: "X",
                 index: index++
             });
@@ -39,24 +45,11 @@
         dojo.addOnLoad(function(){
             dojo.parser.parse();
 
-            t3 = io.connect("http://localhost:8000/games/t3");
-            chat = io.connect("http://localhost:8000/chat");
+            registry.register("socket.io", io);
+            new webasap.T3GameClient();
+            new webasap.ChatClient();
 
-              t3.on('connect', function () {
-                  console.log("t3.on'connect'");
-              });
-              
-              chat.on('connect', function () {
-                  console.log("chat connect.....");
-                chat.emit('woot');
-              });
-
-              chat.on('joined', function(data) {
-                  console.log("received 'chat message'");
-                  console.debug(data);
-              });
-              
-              setInterval("timeout()", 5000);
+            setInterval("timeout()", 5000);
         });
     </script>
 </head>
