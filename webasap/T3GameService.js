@@ -84,7 +84,7 @@ define("webasap/T3GameService",
                 this.board = new webasap._T3Board();
                 this.channel = {};
                 this.redis = {};
-                this.client = {};
+                this.subscriber = {};
                 registry.startTrackService(
                     "http"
                     , dojo.hitch(this, "_bindHttpService")
@@ -99,8 +99,8 @@ define("webasap/T3GameService",
 
                 registry.startTrackService(
                     "socket.io"
-                    , dojo.hitch(this, "_bindIo")
-                    , dojo.hitch(this, "_unbindIo")
+                    , dojo.hitch(this, "_bindSio")
+                    , dojo.hitch(this, "_unbindSio")
                 );
             },
 
@@ -116,29 +116,35 @@ define("webasap/T3GameService",
 
             _bindRedis: function(redis) {
                 this.redis = redis;
-                this.client = redis.createClient();
-//                this.client.subscribe("tictactoe");
+                this.subscriber = redis.createClient();
+                this.publisher = redis.createClient();
+                this.subscriber.subscribe("/games/t3");
+                this.subscriber.on('message', function(channel, message) {
+                    console.log("Received game update: " + message);
+                });
             },
 
             _unbindRedis: function(redis) {
             },
 
-            _bindIo: function(io) {
+            _bindSio: function(io) {
                 this.channel = io.of('/games/t3');
-                this.channel.on('connection', dojo.hitch(this, function (socket) {
-                    console.log("this.channel.on'connection'");
-                    socket.emit('a message', {
-                        that: 'only'
-                        , '/games/t3': 'will get'
-                    });
-                    this.channel.emit('a message', {
-                        everyone: 'in'
-                        , '/games/t3': 'will get'
-                    });
-                }));
+                this.channel.on('connection', dojo.hitch(this, "_onPlayerConnect"));
+                this.channel.on('move', dojo.hitch(this, "_onPlayerMoved"));
             },
-            
-            _unbindIo: function(io) {
+
+            _unbindSio: function(io) {
+            },
+
+            _onPlayerConnect: function(socket) {
+                console.log("this.channel.on'connection'");
+                this.channel.emit('joined', {
+                    msg: 'player joined'
+                });
+            },
+
+            _onPlayerMoved: function(data) {
+                console.log("_onPlayerMoved: " + sys.inspect(data));
             },
 
             _createGame: function(req, res) {
@@ -146,10 +152,15 @@ define("webasap/T3GameService",
                 res.end("New game created.\n");
             },
 
+            _gameUpdates: function(channel, data) {
+                //console.log("_gameUpdates, channel: " + sys.inspect(channel));
+                console.log("_gameUpdates, data: " + sys.inspect(data));
+            },
+
             _modifyGame: function(req, res) {
                 var index = req.body.index;
                 var ch = req.body.ch;
-                this.board.place(index, ch);
+                this.modifyGame(index, ch);
                 if (this.board.win()) {
                     res.end("Game over, " + ch + " wins.\n");
                 } else if (this.board.done()) {
@@ -159,7 +170,16 @@ define("webasap/T3GameService",
                 }
             },
 
+            modifyGame: function(index, ch) {
+                this.board.place(index, ch);
+                this.getGameState();
+            },
+
             _getGame: function(req, res) {
+                res.end(this.getGameState());
+            },
+
+            getGameState: function() {
                 var state = "";
                 var i, x, y, z;
                 for (i = 0; i < 9; i += 3) {
@@ -175,8 +195,8 @@ define("webasap/T3GameService",
                     }
                 }
                 state += "\n";
-                this.client.publish("tictactoe", state);
-                res.end(state);
+                this.publisher.publish("/games/t3", state);
+                return state;
             }
         });
 

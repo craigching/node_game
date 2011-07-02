@@ -4,7 +4,6 @@ define("webasap/App",
 "http",
 "dojo",
 "express",
-"connect",
 "mongoose",
 "webasap/ServiceRegistry",
 "webasap/AccountService",
@@ -12,7 +11,7 @@ define("webasap/App",
 "webasap/ChatService",
 "webasap/LoginService",
 "webasap/T3GameService"
-], function(sys, http, dojo, express, connect, mongoose, redis) {
+], function(sys, http, dojo, express, mongoose, redis) {
     
     dojo.declare(
         "webasap.App",
@@ -28,7 +27,6 @@ define("webasap/App",
                 var server = express.createServer();
                 var RedisStore = require('connect-redis')(express);
 
-
                 server.use(express.static('./public'));
                 server.use(express.logger());
                 server.use(express.bodyParser());
@@ -41,13 +39,12 @@ define("webasap/App",
                     res.send('test');
                 });
 
-                const io = require('socket.io').listen(server);
+                const sio = require('socket.io').listen(server);
                 const redis = require('redis');
-//                const client = redis.createClient();
 
                 registry.register("http", server);
                 registry.register("redis", redis);
-                registry.register("socket.io", io);
+                registry.register("socket.io", sio);
 
                 registry.register("webasap.ChatService", new webasap.ChatService());
                 registry.register("webasap.AccountService", new webasap.AccountService());

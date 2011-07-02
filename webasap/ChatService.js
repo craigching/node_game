@@ -16,8 +16,8 @@ define("webasap/ChatService",
                 );
                 registry.startTrackService(
                     "socket.io"
-                    , dojo.hitch(this, "_bindIo")
-                    , dojo.hitch(this, "_unbindIo")
+                    , dojo.hitch(this, "_bindSio")
+                    , dojo.hitch(this, "_unbindSio")
                 );
             },
 
@@ -31,22 +31,19 @@ define("webasap/ChatService",
             _unbindHttpService: function(server) {
             },
 
-            _bindIo: function(io) {
+            _bindSio: function(io) {
                 this.channel = io.of('/chat');
-                this.channel.on('connection', dojo.hitch(this, function (socket) {
-                    console.log(">> Chat << this.channel.on'connection'");
-                    socket.emit('chat message', {
-                        that: 'only'
-                        , '/chat': 'will get'
-                    });
-                    this.channel.emit('chat message', {
-                        everyone: 'in'
-                        , '/chat': 'will get'
-                    });
-                }));
+                this.channel.on('connection', dojo.hitch(this, "_onJoin"));
             },
 
-            _unbindIo: function(io) {
+            _unbindSio: function(io) {
+            },
+
+            _onJoin: function(socket) {
+                console.log(">> Chat << this.channel.on'connection'");
+                this.channel.emit('joined', {
+                    msg: 'soandso joined'
+                });
             },
 
             join: function(req, res) {

@@ -1,11 +1,17 @@
 deps:
 
 npm install express
-npm install connect
 npm install mongoose
 npm install redis
 npm install connect-redis
-npm install socket.io
+#npm install socket.io
 
-NOTE: Need to see if we can forget the 'npm install connect' call
-since express includes connect
+TEMP: Install these from github instead:
+
+$ cd node_modules
+$ git clone https://github.com/craigching/socket.io.git
+$ git clone https://github.com/LearnBoost/socket.io-client.git
+$ cd ..
+npm install uglify-js
+
+END TEMP
