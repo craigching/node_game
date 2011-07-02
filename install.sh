@@ -16,5 +16,5 @@ DOJO_VERSION=1.7.0b2
 curl http://download.dojotoolkit.org/release-$DOJO_VERSION/dojo-release-$DOJO_VERSION-src.tar.gz >dojo-release-$DOJO_VERSION-src.tar.gz
 tar -zxvf dojo-release-$DOJO_VERSION-src.tar.gz
 
-cd dojo-release-$DOJO_VERSION-src && ln -s ../webasap ./webasap & cd ..
-cd public && ln -s ../dojo-release-$DOJO_VERSION-src ./dojo-$DOJO_VERSION
+cd dojo-release-$DOJO_VERSION-src && ln -s ../webasap ./webasap && cd ..
+cd public && ln -s ../dojo-release-$DOJO_VERSION-src ./dojo-$DOJO_VERSION && cd ..
