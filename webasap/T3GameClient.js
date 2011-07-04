@@ -42,6 +42,7 @@ define("webasap/T3GameClient",
             },
 
             _bindChat: function(chat){
+               chat.join("global"); 
                chat.join("T3Chat"); 
             },
 
