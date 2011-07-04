@@ -133,9 +133,7 @@ define("webasap/T3GameService",
             _onPlayerMoved: function(data) {
                 data = JSON.parse(data);
                 console.log("_onPlayerMoved: " + sys.inspect(data));
-                console.log("== index: " + data["index"] + ", ch: " + data["ch"]);
                 this.modifyGame(data.index, data.ch);
-                console.log("board: " + sys.inspect(this.board));
                 this.channel.emit('update', {board: this.board.board});
             },
 
