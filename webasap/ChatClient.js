@@ -23,7 +23,6 @@ define("webasap/ChatClient",
                 alert("in the _bindSio function");
                 this.channel = io.connect("http://localhost:8000/chat");
                 this.channel.on('joined', dojo.hitch(this, "_joined"));
-                this.join("global");
             },
 
             _unbindSio: function(io) {
@@ -33,7 +32,7 @@ define("webasap/ChatClient",
                console.log("In join function");
                console.log("Room is: "+room);
                this.channel.emit('join', {room: room, username: "Eric"}); 
-               this.rooms[room] = {};
+               this.rooms[room] = this.rooms[room] ? this.rooms[room] : {};
             },
 
             _joined: function(data){
