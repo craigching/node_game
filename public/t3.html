@@ -24,61 +24,35 @@
         var registry = new webasap.ServiceRegistry();
 
         dojo.require("dijit.dijit");
+        dojo.require("dijit.form.TextBox");
+        dojo.require("dijit.form.Button");
         dojo.require("dojo.parser");
 
         dojo.require("webasap.T3GameClient");
         dojo.require("webasap.ui.T3View");
-
         dojo.require("webasap.ChatClient");
 
-        var index = 0;
-
-        function timeout() {
-            var t3 = registry.getService("webasap.T3GameClient")[0];
-            console.debug(t3);
-            t3.move({
-                ch: "X",
-                index: index++
-            });
-        }
-        
         dojo.addOnLoad(function(){
             dojo.parser.parse();
 
             registry.register("socket.io", io);
             new webasap.T3GameClient();
             new webasap.ChatClient();
-
-            setInterval("timeout()", 5000);
+            
+            var button = dijit.byId("submit3");
+            dojo.connect(button, 'onclick', function(){
+                var textBox = dijit.byId("textbox");
+                var value = textBox.get('value');
+                var t3 = registry.getService("webasap.T3GameClient")[0];
+                console.debug(t3);
+                t3.move(value);
+            });
         });
     </script>
 </head>
-<body>
+<body class="claro">
     <div id="content" data-dojo-type="webasap.ui.T3View"></div>
-    <!--
-    <script>    
-        $(document).ready(function() {
-            console.log("Creating new io.Socket");
-            var socket = io.connect("http://localhost:3000");
-            console.log("Done creating io.Socket");
-            var content = $('#content');
-
-            socket.on('connect', function() {
-                console.log("connect");
-            });
-
-            socket.on('message', function(message){
-                console.log("message: " + message);
-                content.prepend(message + '<br />');
-            }) ;
-
-            socket.on('disconnect', function() {
-                console.log('disconnected');
-                content.html("<b>Disconnected!</b>");
-            });
-
-        });
-    </script>
-    -->
+    <input id="textbox" data-dojo-type="dijit.form.TextBox" data-dojo-props='type:"text"'/>
+    <button id="submit3" data-dojo-type="dijit.form.Button" data-dojo-props='type:"submit"'>Submit</button>
 </body>
 </html>

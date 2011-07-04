@@ -15,6 +15,7 @@ define("webasap/T3GameService",
             },
 
             place: function(index, ch) {
+                console.log("index: " + index + ", ch: " + ch);
                 this.board[index] = ch;
             },
 
@@ -85,11 +86,7 @@ define("webasap/T3GameService",
                 this.channel = {};
                 this.redis = {};
                 this.subscriber = {};
-                registry.startTrackService(
-                    "http"
-                    , dojo.hitch(this, "_bindHttpService")
-                    , dojo.hitch(this, "_unbindHttpService")
-                );
+                this.publisher = {};
 
                 registry.startTrackService(
                     "redis"
@@ -102,16 +99,6 @@ define("webasap/T3GameService",
                     , dojo.hitch(this, "_bindSio")
                     , dojo.hitch(this, "_unbindSio")
                 );
-            },
-
-            _bindHttpService: function(server) {
-                server.post('/games/t3', dojo.hitch(this, "_createGame"));
-                // TODO We need an inst id for a game
-                server.get('/games/t3', dojo.hitch(this, "_getGame"));
-                server.put('/games/t3', dojo.hitch(this, "_modifyGame"));
-            },
-
-            _unbindHttpService: function(server) {
             },
 
             _bindRedis: function(redis) {
@@ -144,7 +131,12 @@ define("webasap/T3GameService",
             },
 
             _onPlayerMoved: function(data) {
+                data = JSON.parse(data);
                 console.log("_onPlayerMoved: " + sys.inspect(data));
+                console.log("== index: " + data["index"] + ", ch: " + data["ch"]);
+                this.modifyGame(data.index, data.ch);
+                console.log("board: " + sys.inspect(this.board));
+                this.channel.emit('update', {board: this.board.board});
             },
 
             _createGame: function(req, res) {
@@ -172,7 +164,7 @@ define("webasap/T3GameService",
 
             modifyGame: function(index, ch) {
                 this.board.place(index, ch);
-                this.getGameState();
+                return this.getGameState();
             },
 
             _getGame: function(req, res) {

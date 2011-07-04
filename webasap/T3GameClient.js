@@ -22,15 +22,19 @@ define("webasap/T3GameClient",
                 this.channel.on('connect', function() {
                     console.log("Connected to t3 game service.");
                 });
+                this.channel.on('update', dojo.hitch(this, "_update"));
             },
 
             _unbindSio: function(io) {
+            },
+            
+            _update: function(data) {
+                console.debug(data);
             },
 
             move: function(data) {
                 this.channel.emit('move', data);
             }
-
 
         });
 
