@@ -9,13 +9,13 @@ require({
   packages: [
     {
       name: 'dojo',
-      location: 'dojo-release-1.7.0b1-src/dojo',
+      location: 'dojo-release-1.7.0b2-src/dojo',
       main: 'main',
       lib: '.'
     },
     {
       name: 'dijit',
-      location: 'dojo-release-1.7.0b1-src/dijit',
+      location: 'dojo-release-1.7.0b2-src/dijit',
       main: 'main',
       lib: '.'
     }

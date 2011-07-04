@@ -18,6 +18,8 @@
     <script src="/socket.io/socket.io.js"></script>
 
     <script type="text/javascript">
+        //this is temporary until we can get the user from the session in SIO
+        var user = "Eric";
         // Get the service registry and instantiate it
         // before anything else
         dojo.require("webasap.ServiceRegistry");
@@ -51,6 +53,11 @@
 
             setInterval("timeout()", 5000);
         });
+        
+        function setUser(){
+            user = dojo.byId('username').value;
+            alert("User is "+user);
+        }
     </script>
 </head>
 <body>
@@ -80,5 +87,7 @@
         });
     </script>
     -->
+    User: <input id='username' /><br />
+    <button onclick='setUser();'>Set User</button>
 </body>
 </html>

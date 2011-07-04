@@ -9,6 +9,7 @@ define("webasap/ChatClient",
         {
             constructor: function() {
                 this.channel = {};
+                this.rooms = {}; 
                 registry.register("webasap.ChatClient", this);
                 registry.startTrackService(
                     "socket.io"
@@ -18,20 +19,31 @@ define("webasap/ChatClient",
             },
 
             _bindSio: function(io) {
+                console.log("In _bindSio");
+                alert("in the _bindSio function");
                 this.channel = io.connect("http://localhost:8000/chat");
-                this.channel.on('connect', dojo.hitch(this, function() {
-                    console.log("Connected to Chat service.");
-                    this.channel.emit('woot');
-                }));
-                this.channel.on('joined', function(data) {
-                    console.log("received 'chat message'");
-                    console.debug(data);
-                });
+                this.channel.on('joined', dojo.hitch(this, "_joined"));
+                this.join("global");
             },
 
             _unbindSio: function(io) {
-            }
+            },
 
+            join: function(room){
+               console.log("In join function");
+               console.log("Room is: "+room);
+               this.channel.emit('join', {room: room, username: "Eric"}); 
+               this.rooms[room] = {};
+            },
+
+            _joined: function(data){
+                console.log("Joined Channel: "+data.room);
+                console.debug(data);
+            },
+
+            leave: function(room){
+                this.channel.emit('leave', {room: room});
+            }
         });
 
 return webasap.ChatClient;

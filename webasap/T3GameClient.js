@@ -15,6 +15,11 @@ define("webasap/T3GameClient",
                     , dojo.hitch(this, "_bindSio")
                     , dojo.hitch(this, "_unbindSio")
                 );
+                registry.startTrackService(
+                    "webasap.ChatClient"
+                    , dojo.hitch(this, "_bindChat")
+                    , dojo.hitch(this, "_unbindChat")
+                );
             },
 
             _bindSio: function(io) {
@@ -29,9 +34,15 @@ define("webasap/T3GameClient",
 
             move: function(data) {
                 this.channel.emit('move', data);
+            },
+
+            _bindChat: function(chat){
+               chat.join("T3Chat"); 
+            },
+
+            _unbindChat: function(chat){
+                chat.leave("T3Chat");
             }
-
-
         });
 
 return webasap.T3GameClient;

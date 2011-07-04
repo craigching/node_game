@@ -9,11 +9,9 @@ define("webasap/ChatService",
         {
             constructor: function() {
                 this.channel = {};
-                registry.startTrackService(
-                    "http"
-                    , dojo.hitch(this, "_bindHttpService")
-                    , dojo.hitch(this, "_unbindHttpService")
-                );
+                this.rooms = {};
+                //rooms has name as key and an object as value containing
+                //this users [] and game id?
                 registry.startTrackService(
                     "socket.io"
                     , dojo.hitch(this, "_bindSio")
@@ -21,46 +19,25 @@ define("webasap/ChatService",
                 );
             },
 
-            _bindHttpService: function(server) {
-                server.get('/chat/join', dojo.hitch(this, "join"));
-                server.get('/chat/recv', dojo.hitch(this, "recv"));
-                server.get('/chat/send', dojo.hitch(this, "send"));
-                server.get('/chat/quit', dojo.hitch(this, "quit"));
-            },
-
-            _unbindHttpService: function(server) {
-            },
-
             _bindSio: function(io) {
                 this.channel = io.of('/chat');
-                this.channel.on('connection', dojo.hitch(this, "_onJoin"));
+                this.channel.on('join', dojo.hitch(this, "_onJoin"));
             },
 
             _unbindSio: function(io) {
             },
 
-            _onJoin: function(socket) {
-                console.log(">> Chat << this.channel.on'connection'");
+            _onJoin: function(data) {
+                if(!data){
+                    console.log("data was null!!!!!!!");
+                }
+                console.log("CHAT: joined: "+data.username);
                 this.channel.emit('joined', {
-                    msg: 'soandso joined'
+                    msg: data.username+ ' joined',
+                    room: 'global'
                 });
             },
 
-            join: function(req, res) {
-                console.log("Chat.join()");
-            },
-
-            recv: function(req, res) {
-                console.log("Chat.recv()");
-            },
-
-            send: function(req, res) {
-                console.log("Chat.send()");
-            },
-
-            quit: function(req, res) {
-                console.log("Chat.quit()");
-            }
         });
 
 return webasap.ChatService;
