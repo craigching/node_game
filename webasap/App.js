@@ -49,7 +49,8 @@ define("webasap/App",
                 registry.register("webasap.ChatService", new webasap.ChatService());
                 registry.register("webasap.AccountService", new webasap.AccountService());
                 registry.register("webasap.LoginService", new webasap.LoginService());
-                registry.register("webasap.T3GameService", new webasap.T3GameService());
+//                registry.register("webasap.T3GameService", new webasap.T3GameService());
+                new webasap.T3GameService();
 
                 server.get('/', function(req, res){
                     res.send('Hello, World, from Express.');

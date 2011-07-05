@@ -1,8 +1,8 @@
 define("webasap/T3GameService", 
 [
 "dojo",
-"sys"
-], function(dojo, sys) {
+"webasap/ServiceResolver"
+], function(dojo) {
 
     dojo.declare(
         "webasap._T3Board",
@@ -78,7 +78,7 @@ define("webasap/T3GameService",
 
     dojo.declare(
         "webasap.T3GameService",
-        null,
+        [webasap.ServiceResolver],
         {
 
             constructor: function() {
@@ -87,40 +87,29 @@ define("webasap/T3GameService",
                 this.redis = {};
                 this.subscriber = {};
                 this.publisher = {};
-
-                registry.startTrackService(
-                    "redis"
-                    , dojo.hitch(this, "_bindRedis")
-                    , dojo.hitch(this, "_unbindRedis")
-                );
-
-                registry.startTrackService(
-                    "socket.io"
-                    , dojo.hitch(this, "_bindSio")
-                    , dojo.hitch(this, "_unbindSio")
-                );
+                this.setServiceNames(["webasap.T3GameService"]);
+                this.setServiceDeps([
+                    {
+                        serviceName:"redis"
+                        , instName:"redis"
+                    },
+                    {
+                        serviceName:"socket.io"
+                        , instName: "sio"
+                    }
+                    ]);
             },
 
-            _bindRedis: function(redis) {
-                this.redis = redis;
-                this.subscriber = redis.createClient();
-                this.publisher = redis.createClient();
+            activate: function() {
+                this.subscriber = this.redis.createClient();
+                this.publisher = this.redis.createClient();
                 this.subscriber.subscribe("/games/t3");
                 this.subscriber.on('message', function(channel, message) {
                     console.log("Received game update: " + message);
                 });
-            },
-
-            _unbindRedis: function(redis) {
-            },
-
-            _bindSio: function(io) {
-                this.channel = io.of('/games/t3');
+                this.channel = this.sio.of('/games/t3');
                 this.channel.on('connection', dojo.hitch(this, "_onPlayerConnect"));
                 this.channel.on('move', dojo.hitch(this, "_onPlayerMoved"));
-            },
-
-            _unbindSio: function(io) {
             },
 
             _onPlayerConnect: function(socket) {

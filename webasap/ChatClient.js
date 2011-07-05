@@ -1,31 +1,30 @@
 define("webasap/ChatClient", 
 [
-"dojo"
+"dojo",
+"webasap/ServiceResolver"
 ], function(dojo) {
 
     dojo.declare(
         "webasap.ChatClient",
-        null,
+        [webasap.ServiceResolver],
         {
             constructor: function() {
                 this.channel = {};
                 this.rooms = {}; 
-                registry.register("webasap.ChatClient", this);
-                registry.startTrackService(
-                    "socket.io"
-                    , dojo.hitch(this, "_bindSio")
-                    , dojo.hitch(this, "_unbindSio")
-                );
+                this.sio = {};
+                this.setServiceNames(["webasap.ChatClient"]);
+                this.setServiceDeps([
+                    {
+                        serviceName:"socket.io"
+                        , instName: "sio"
+                    }
+                    ]);
             },
 
-            _bindSio: function(io) {
-                console.log("In _bindSio");
-                alert("in the _bindSio function");
-                this.channel = io.connect("http://localhost:8000/chat");
+            activate: function() {
+                console.log("ChatClient.activate()");
+                this.channel = this.sio.connect("http://localhost:8000/chat");
                 this.channel.on('joined', dojo.hitch(this, "_joined"));
-            },
-
-            _unbindSio: function(io) {
             },
 
             join: function(room){

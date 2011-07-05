@@ -36,8 +36,8 @@
             dojo.parser.parse();
 
             registry.register("socket.io", io);
-            new webasap.T3GameClient();
             new webasap.ChatClient();
+            new webasap.T3GameClient();
             
             var button = dijit.byId("submit3");
             dojo.connect(button, 'onclick', function(){
