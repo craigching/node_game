@@ -12,8 +12,9 @@ define("webasap/T3GameClient",
                 this.channel = {};
                 this.sio = {};
                 this.chat = {};
-                this.setServiceNames(["webasap.T3GameClient"]);
-                this.setServiceDeps([
+                this.declareServices(
+                    // deps
+                    [
                     {
                         serviceName:"webasap.ChatClient"
                         , instName:"chat"
@@ -22,7 +23,10 @@ define("webasap/T3GameClient",
                         serviceName:"socket.io"
                         , instName: "sio"
                     }
-                    ]);
+                    ],
+                    // service names
+                    ["webasap.T3GameClient"]
+                );
             },
 
             activate: function() {

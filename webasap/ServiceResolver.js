@@ -12,8 +12,13 @@ define("webasap/ServiceResolver",
                 this.serviceNames = [];
             },
 
-            setServiceDeps: function(serviceDeps) {
+            declareServices: function(serviceDeps, serviceNames) {
                 this.serviceDeps = serviceDeps;
+                this.serviceNames = serviceNames;
+                this._processDeps();
+            },
+
+            _processDeps: function() {
                 dojo.forEach(this.serviceDeps, function(dep) {
                     registry.startTrackService(
                         dep.serviceName
@@ -31,12 +36,6 @@ define("webasap/ServiceResolver",
                         }(dep))
                     );
                 }, this);
-            },
-
-            setServiceNames: function(serviceNames) {
-                console.log("==> setServiceNames");
-                console.debug(serviceNames);
-                this.serviceNames = serviceNames;
             },
 
             _checkStatus: function() {

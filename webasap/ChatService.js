@@ -1,30 +1,34 @@
 define("webasap/ChatService", 
 [
-"dojo"
+"dojo",
+"webasap/ServiceResolver"
 ], function(dojo) {
 
     dojo.declare(
         "webasap.ChatService",
-        null,
+        [webasap.ServiceResolver],
         {
             constructor: function() {
                 this.channel = {};
                 this.rooms = {};
                 //rooms has name as key and an object as value containing
                 //this users [] and game id?
-                registry.startTrackService(
-                    "socket.io"
-                    , dojo.hitch(this, "_bindSio")
-                    , dojo.hitch(this, "_unbindSio")
+                this.declareServices(
+                    // deps
+                    [
+                    {
+                        serviceName:"socket.io"
+                        , instName: "sio"
+                    }
+                    ],
+                    // service names
+                    ["webasap.ChatService"]
                 );
             },
 
-            _bindSio: function(io) {
-                this.channel = io.of('/chat');
+            activate: function() {
+                this.channel = this.sio.of('/chat');
                 this.channel.on('join', dojo.hitch(this, "_onJoin"));
-            },
-
-            _unbindSio: function(io) {
             },
 
             _onJoin: function(data) {

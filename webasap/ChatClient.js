@@ -12,13 +12,17 @@ define("webasap/ChatClient",
                 this.channel = {};
                 this.rooms = {}; 
                 this.sio = {};
-                this.setServiceNames(["webasap.ChatClient"]);
-                this.setServiceDeps([
+                this.declareServices(
+                    // deps
+                    [
                     {
                         serviceName:"socket.io"
                         , instName: "sio"
                     }
-                    ]);
+                    ],
+                    // service names
+                    ["webasap.ChatClient"]
+                );
             },
 
             activate: function() {

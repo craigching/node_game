@@ -46,10 +46,9 @@ define("webasap/App",
                 registry.register("redis", redis);
                 registry.register("socket.io", sio);
 
-                registry.register("webasap.ChatService", new webasap.ChatService());
+                new webasap.ChatService();
                 registry.register("webasap.AccountService", new webasap.AccountService());
                 registry.register("webasap.LoginService", new webasap.LoginService());
-//                registry.register("webasap.T3GameService", new webasap.T3GameService());
                 new webasap.T3GameService();
 
                 server.get('/', function(req, res){

@@ -87,8 +87,9 @@ define("webasap/T3GameService",
                 this.redis = {};
                 this.subscriber = {};
                 this.publisher = {};
-                this.setServiceNames(["webasap.T3GameService"]);
-                this.setServiceDeps([
+                this.declareServices(
+                    // deps
+                    [
                     {
                         serviceName:"redis"
                         , instName:"redis"
@@ -97,7 +98,10 @@ define("webasap/T3GameService",
                         serviceName:"socket.io"
                         , instName: "sio"
                     }
-                    ]);
+                    ],
+                    // service names
+                    ["webasap.T3GameService"]
+                );
             },
 
             activate: function() {
