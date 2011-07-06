@@ -42,7 +42,6 @@ define("webasap/ServiceResolver",
                 //  TODO Not really safe to assume satisfied is true here
                 var satisfied = true;
                 dojo.forEach(this.serviceDeps, function(dep) {
-                    console.log("==> _checkStatus, dep name: " + dep.serviceName + ", status: " + dep.status);
                     if (!dep.status || dep.status !== 'satisfied') {
                         satisfied = false;
                     }
@@ -52,10 +51,7 @@ define("webasap/ServiceResolver",
                     this.activate();
                     // Now register it if there are 
                     // any services specified.
-                    console.log("serviceNames: ");
-                    console.debug(this.serviceNames);
                     dojo.forEach(this.serviceNames, dojo.hitch(this, function(name) {
-                        console.log("registering: " + name);
                         registry.register(name, this);
                     }));
                 }

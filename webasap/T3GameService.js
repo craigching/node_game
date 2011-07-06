@@ -1,8 +1,9 @@
 define("webasap/T3GameService", 
 [
 "dojo",
+"sys",
 "webasap/ServiceResolver"
-], function(dojo) {
+], function(dojo, sys) {
 
     dojo.declare(
         "webasap._T3Board",
